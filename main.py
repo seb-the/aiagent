@@ -36,4 +36,5 @@ def main():
     else:
         generate_response(messages)
 
-main()
+if __name__ == "__main__":  # python
+    main()
