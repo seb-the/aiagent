@@ -25,3 +25,30 @@ def get_files_info(working_directory, directory="."):
 
     except Exception as e:
         return f"Error: {e}"
+
+
+def get_file_content(working_directory, file_path):
+    try:
+        abs_working_path = os.path.abspath(working_directory)
+        abs_target_path = os.path.abspath(os.path.join(abs_working_path, file_path))
+        target_within_boundaries = abs_target_path.startswith(abs_working_path + os.sep) or abs_target_path == abs_working_path
+        if not target_within_boundaries:
+            return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
+        if not os.path.isfile(abs_target_path):
+            return f'Error: File not found or is not a regular file: "{file_path}"'
+
+        MAX_CHARS = 10000
+
+        with open(abs_target_path, "r") as file:
+            file_content_string = file.read(MAX_CHARS + 1)
+
+        if len(file_content_string) > MAX_CHARS:
+            return file_content_string[:-1] + f'[...File "{file_path}" truncated at 10000 characters]'
+        else:
+            return file_content_string
+
+
+
+
+    except Exception as e:
+        return f'Error: {e}'
