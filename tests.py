@@ -1,6 +1,5 @@
 if __name__ == "__main__":  # python
-    from functions.files import get_file_content
-    print(get_file_content("calculator", "main.py"))
-    print(get_file_content("calculator", "pkg/calculator.py"))
-    print(get_file_content("calculator", "/bin/cat"))
-    print(get_file_content("calculator", "pkg/does_not_exist.py"))
+    from functions import write_files
+    print(write_files("calculator", "lorem.txt", "wait, this isn't lorem ipsum"))
+    print(write_files("calculator", "pkg/morelorem.txt", "lorem ipsum dolor sit amet"))
+    print(write_files("calculator", "/tmp/temp.txt", "this should not be allowed"))
