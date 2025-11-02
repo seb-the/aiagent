@@ -1,4 +1,6 @@
 import os
+import subprocess
+import sys
 
 def get_files_info(working_directory, directory="."):
     try:
@@ -68,3 +70,32 @@ def write_files(working_directory, file_path, content):
 
     except Exception as e:
         return f'Error: {e}'
+
+
+def run_python_file(working_directory, file_path, args=[]):
+    try:
+        abs_working_path = os.path.abspath(working_directory)
+        abs_target_path = os.path.abspath(os.path.join(abs_working_path, file_path))
+        target_within_boundaries = abs_target_path.startswith(abs_working_path + os.sep) or abs_target_path == abs_working_path
+        if not target_within_boundaries:
+            return f'Error: Cannot execute "{file_path}" as it is outside the permitted working directory'
+        if not os.path.exists(abs_target_path):
+            return f'Error: File "{file_path}" not found.'
+        if not abs_target_path.endswith(".py"):
+            return f'Error: "{file_path}" is not a Python file.'
+        
+        try:
+            cmd = [sys.executable, abs_target_path, *args]
+            completed_process = subprocess.run(cmd, cwd = abs_working_path, timeout = 30, capture_output = True, text = True)
+            if completed_process.returncode != 0:
+                return f'STDOUT: {completed_process.stdout}STDERR: {completed_process.stderr} Process exited with code {completed_process.returncode}'
+            if completed_process.stdout == "":
+                return f"No output produced."
+            return f'STDOUT: {completed_process.stdout}STDERR: {completed_process.stderr}'
+
+        except Exception as e:
+            return f"Error: executing Python file: {e}"
+
+    except Exception as e:
+        return f'Error: {e}'
+    
