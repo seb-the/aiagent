@@ -115,10 +115,68 @@ schema_get_files_info = types.FunctionDeclaration(
     ),
 )
 
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Returns content of specified file restricted to the first 10000 characters, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to return content from, relative to the working directory."
+            )
+        }
+    )
+)
+
+
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Runs the specified file with the specified args, returning stdout and stderr and if it is not 0 also the exit code, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to execute, relative to the working directory."
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                description="List of strings to pass as arguments when running the file.",
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="A single CLI argument."
+                )
+            )
+        },
+        required=["file_path"]
+    )
+)
+
+schema_write_files = types.FunctionDeclaration(
+    name="write_file",
+    description="Overwrite the specified existing file with the content or create it if not existent and write the content to it, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to overwrite with content or create and write content to."
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="The content to write into the file."
+            )
+        }
+    )
+)
 
 available_functions = types.Tool(
     function_declarations=[
         schema_get_files_info,
+        schema_get_file_content,
+        schema_run_python_file,
+        schema_write_files
     ]
 )
     

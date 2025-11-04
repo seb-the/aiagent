@@ -1,1 +1,1 @@
-from .get_files_info import get_files_info, get_file_content, write_files, run_python_file, schema_get_files_info, available_functions
+from .get_files_info import get_files_info, get_file_content, write_files, run_python_file, schema_get_files_info, schema_get_file_content, schema_run_python_file, schema_write_files, available_functions
